@@ -9,12 +9,16 @@ require "cooker/version"
 module Cooker
   class Application
     def initialize()
+      @logger = Logger.new(STDERR)
       @optparse = OptionParser.new
       @optparse.version = Cooker::VERSION
       @options = {
+        verbose: true,
       }
       define_options
     end
+    attr_reader :options
+    attr_reader :optparse
 
     def main(args=[])
       rest = @optparse.order(args)
@@ -27,7 +31,10 @@ module Cooker
     end
 
     private
-    def define_options
+    def define_options()
+      optparse.on("-V", "--[no-]verbose", "Run verbosely") do |value|
+        @options[:verbose] = value
+      end
     end
 
     def get_command(name)
