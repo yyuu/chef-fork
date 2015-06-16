@@ -13,7 +13,7 @@ module Cooker
       @optparse = OptionParser.new
       @optparse.version = Cooker::VERSION
       @options = {
-        verbose: true,
+        verbose: false,
       }
       define_options
     end
@@ -33,7 +33,7 @@ module Cooker
     private
     def define_options()
       optparse.on("-V", "--[no-]verbose", "Run verbosely") do |value|
-        @options[:verbose] = value
+        options[:verbose] = value
       end
     end
 
