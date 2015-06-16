@@ -10,8 +10,7 @@ module Cooker
       def run(args=[])
         rest = optparse.order(args)
         hostname = rest.shift
-        exec(ssh_command(hostname, rest))
-        exit(127)
+        ssh(hostname, rest)
       end
 
       private
@@ -44,6 +43,11 @@ module Cooker
         optparse.on("--[no-]host-key-verify", "Verify host key, enabled by default") do |value|
           options[:host_key_verify] = value
         end
+      end
+
+      def ssh(hostname, args=[])
+        exec(ssh_command(hostname, args))
+        exit(127)
       end
 
       def ssh_command(hostname, args=[])
