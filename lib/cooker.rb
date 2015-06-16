@@ -1,5 +1,6 @@
-require "cooker/version"
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 
-module Cooker
-  # Your code goes here...
-end
+require "cooker/application"
+
+# vim:set ft=ruby :
