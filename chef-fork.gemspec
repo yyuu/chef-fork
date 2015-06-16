@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cooker/version'
+require 'chef/fork/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "cooker"
-  spec.version       = Cooker::VERSION
+  spec.name          = "chef-fork"
+  spec.version       = Chef::Fork::VERSION
   spec.authors       = ["Yamashita Yuu"]
   spec.email         = ["peek824545201@gmail.com"]
 
