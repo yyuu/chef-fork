@@ -19,7 +19,7 @@ class Chef
           super
           options.merge!({
             ssh_user: "root",
-            host_key_verify: true,
+            host_key_verify: false,
           })
 
           optparse.on("-x USERNAME", "--ssh-user USERNAME", "The ssh username") do |value|
@@ -38,7 +38,7 @@ class Chef
             options[:identity_file] = value
           end
 
-          optparse.on("--[no-]host-key-verify", "Verify host key, enabled by default") do |value|
+          optparse.on("--[no-]host-key-verify", "Verify host key, disabled by default") do |value|
             options[:host_key_verify] = value
           end
         end
