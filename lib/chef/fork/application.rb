@@ -110,17 +110,17 @@ class Chef
       end
 
       def get_command(name)
+        begin
+          require "chef/fork/commands/#{name}"
+        rescue LoadError
+          # ignore LoadError for built-in commands
+        end
         class_name = name.to_s.split(/[^\w]+/).map { |s| s.capitalize }.join
         begin
           Chef::Fork::Commands.const_get(class_name)
         rescue NameError
-          begin
-            require "chef/fork/commands/#{name}"
-            Chef::Fork::Commands.const_get(class_name)
-          rescue LoadError
-            require "chef/fork/commands/help"
-            Chef::Fork::Commands::Help
-          end
+          require "chef/fork/commands/help"
+          Chef::Fork::Commands::Help
         end
       end
     end
