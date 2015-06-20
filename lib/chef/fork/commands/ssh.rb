@@ -18,9 +18,14 @@ class Chef
         def define_options
           super
           options.merge!({
+            ssh_config: "/dev/null",
             ssh_user: "root",
             host_key_verify: false,
           })
+
+          optparse.on("--ssh-config CONFIGFILE", "The ssh configuration file") do |value|
+            options[:ssh_config] = value
+          end
 
           optparse.on("-x USERNAME", "--ssh-user USERNAME", "The ssh username") do |value|
             options[:ssh_user] = value
@@ -51,7 +56,7 @@ class Chef
         def ssh_command(hostname, args=[])
           ssh_options = [
             "-F",
-            "/dev/null",
+            options[:ssh_config],
           ]
 
           if options[:ssh_user]
@@ -72,7 +77,7 @@ class Chef
             end
             proxy_options = [
               "-F",
-              "/dev/null",
+              options[:ssh_config]
             ]
             proxy_options << "-W" << "%h:%p"
             if options[:identity_file]
