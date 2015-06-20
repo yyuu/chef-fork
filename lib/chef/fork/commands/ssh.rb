@@ -18,9 +18,10 @@ class Chef
         def define_options
           super
           options.merge!({
+            forward_agent: false,
+            host_key_verify: false,
             ssh_config: "/dev/null",
             ssh_user: "root",
-            host_key_verify: false,
           })
 
           optparse.on("--ssh-config CONFIGFILE", "The ssh configuration file") do |value|
@@ -39,6 +40,10 @@ class Chef
             options[:ssh_gateway] = value
           end
 
+          optparse.on("-A", "--[no-]forward-agent", "Enable SSH agent forwarding") do |value|
+            options[:forward_agent] = value
+          end
+
           optparse.on("-i IDENTITY_FILE", "--identity-file IDENTITY_FILE") do |value|
             options[:identity_file] = value
           end
@@ -55,6 +60,7 @@ class Chef
 
         def ssh_command(hostname, args=[])
           ssh_options = [
+            options[:forward_agent] ? "-A" : "-a",
             "-F",
             options[:ssh_config],
           ]
@@ -77,7 +83,7 @@ class Chef
             end
             proxy_options = [
               "-F",
-              options[:ssh_config]
+              options[:ssh_config],
             ]
             proxy_options << "-W" << "%h:%p"
             if options[:identity_file]
