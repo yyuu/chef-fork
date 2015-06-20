@@ -1,38 +1,42 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require "chef/fork/commands"
+require "chef/fork/commands/data"
 
 class Chef
   class Fork
     module Commands
-      class Environment < Noop
+      class Databag < Data
         def run(args=[])
-          case args.first
-          when "from"
-            environment_from(args.slice(1..-1))
-          when "show"
-            environment_show(args.slice(1..-1))
-          else
-            raise(NameError.new(args.inspect))
-          end
+          data_bag(args)
         end
 
         private
-        def environment_from(args=[])
+        def data_bag(args=[])
           case args.first
-          when "file"
-            environment_from_file(args.slice(1..-1))
+          when "from"
+            data_bag_from(args.slice(1..-1))
+          when "show"
+            data_bag_show(args.slice(1..-1))
           else
             raise(NameError.new(args.inspect))
           end
         end
 
-        def environment_from_file(args=[])
+        def data_bag_from(args=[])
+          case args.first
+          when "file"
+            data_bag_from_file(args.slice(1..-1))
+          else
+            raise(NameError.new(args.inspect))
+          end
+        end
+
+        def data_bag_from_file(args=[])
           raise(NotImplementedError.new(args.inspect))
         end
 
-        def environment_show(args=[])
+        def data_bag_show(args=[])
           raise(NotImplementedError.new(args.inspect))
         end
       end
