@@ -1,3 +1,5 @@
+*.swo
+*.swp
 /.bundle/
 /.yardoc
 /Gemfile.lock
