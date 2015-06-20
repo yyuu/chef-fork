@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 require "chef"
-require "erb"
+require "erubis"
 require "json"
 require "shellwords"
 require "chef/fork/commands/ssh"
