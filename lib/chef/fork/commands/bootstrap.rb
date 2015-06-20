@@ -13,17 +13,10 @@ class Chef
       class Bootstrap < Ssh
         def run(args=[])
           rest = optparse.order(args)
-          if options[:distro]
-            if template_file = find_template(options[:distro])
-              template = File.read(template_file)
-              command = render_template(template)
-              hostname = rest.shift
-  #           ssh(hostname, command) # TODO
-              STDOUT.puts(command)
-            else
-              raise(NameError.new("Unknown distro: #{options[:distro].inspect}"))
-            end
-          end
+          hostname = rest.shift
+          command = bootstrap_command()
+#         ssh(hostname, command) # TODO
+          STDOUT.puts(command)
         end
 
         private
@@ -31,9 +24,9 @@ class Chef
           super
           options.merge!({
             distro: "chef-full",
-            use_sudo: true,
-            run_list: [],
             first_boot_attributes: {},
+            run_list: [],
+            use_sudo: true,
           })
 
           optparse.on("-N NAME", "--node-name NAME", "The Chef node name for new node") do |value|
@@ -50,6 +43,10 @@ class Chef
 
           optparse.on("--sudo", "Execute the bootstrap via sudo") do |value|
             options[:use_sudo] = value
+          end
+
+          optparse.on("--template-file TEMPLATE", "Full path to location of template to use") do |value|
+            options[:template_file] = value
           end
 
           optparse.on("-r RUN_LIST", "--run-list RUN_LIST", "Comma separated list of roles/recipes to apply") do |value|
@@ -69,9 +66,19 @@ class Chef
           end
         end
 
+        def bootstrap_command()
+          template_file = options[:template_file] || find_template(options[:distro])
+          if template_file
+            template = File.read(template_file)
+            render_template(template)
+          else
+            raise(NameError.new("Unknown distro: #{distro.inspect}"))
+          end
+        end
+
         def find_template(name)
-          templates = $LOAD_PATH.map { |path| File.join(path, "chef", "knife", "bootstrap", "templates", "#{options[:distro]}.erb") }
-          templates.select { |template| File.exist?(template) }.first
+          templates = $LOAD_PATH.map { |path| File.join(path, "chef", "knife", "bootstrap", "templates", "#{name}.erb") }
+          templates.find { |path| File.exist?(path) }
         end
 
         def render_template(template)
