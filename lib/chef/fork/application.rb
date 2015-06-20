@@ -13,10 +13,8 @@ class Chef
       def initialize()
         @logger = Logger.new(STDERR)
         @optparse = OptionParser.new
-        @optparse.version = Chef::Fork::VERSION
-        @options = {
-          verbose: false,
-        }
+        @optparse.version = "#{Chef::Fork::VERSION} (chef #{Chef::VERSION})"
+        @options = {}
         define_options
       end
       attr_reader :options
@@ -35,24 +33,56 @@ class Chef
 
       private
       def define_options()
+        options.merge!({
+          editor: ENV["EDITOR"],
+          verbose: false,
+        })
+        optparse.on("-c CONFIG", "--config CONFIG", "The configuration file to use") do |value|
+          options[:config_file] = value
+        end
+
         optparse.on("-V", "--[no-]verbose", "Run verbosely") do |value|
           options[:verbose] = value
+        end
+
+        optparse.on("-E ENVIRONMENT", "--environment ENVIRONMENT", "Set the Chef environment") do |value|
+          options[:environment] = value
+        end
+
+        optparse.on("-e EDITOR", "--editor EDITOR", "Set the editor to use for interactive commands") do |value|
+          options[:editor] = value
+        end
+
+        optparse.on("-u USER", "--user USER", "API Client Username") do |value|
+          options[:node_name] = value
+        end
+
+        optparse.on("-k KEY", "--key KEY", "API Client Key") do |value|
+          options[:client_key] = value
+        end
+
+        optparse.on("-s URL", "--server-url URL", "Chef Server URL") do |value|
+          options[:chef_server_url] = value
         end
       end
 
       def locate_config_file(name)
-        candidate_configs = []
-        if ENV.key?("#{name.upcase}_HOME")
-          candidate_config << File.join(File.expand_path(ENV["#{name.upcase}_CONFIG"]), "#{name.downcase}.rb")
+        if options.key?(:config_file)
+          options[:config_file]
+        else
+          candidate_configs = []
+          if ENV.key?("#{name.upcase}_HOME")
+            candidate_config << File.join(File.expand_path(ENV["#{name.upcase}_CONFIG"]), "#{name.downcase}.rb")
+          end
+          candidate_configs << File.expand_path("#{name.downcase}.rb")
+          if config_dir = chef_config_dir(Dir.pwd)
+            candidate_configs << File.join(config_dir, "#{name.downcase}.rb")
+          end
+          if ENV.key?("HOME")
+            candidate_configs << File.join(File.expand_path(ENV["HOME"]), "#{name.downcase}.rb")
+          end
+          candidate_configs.find { |candidate_config| File.exist?(candidate_config) }
         end
-        candidate_configs << File.expand_path("#{name.downcase}.rb")
-        if config_dir = chef_config_dir(Dir.pwd)
-          candidate_configs << File.join(config_dir, "#{name.downcase}.rb")
-        end
-        if ENV.key?("HOME")
-          candidate_configs << File.join(File.expand_path(ENV["HOME"]), "#{name.downcase}.rb")
-        end
-        candidate_configs.find { |candidate_config| File.exist?(candidate_config) }
       end
 
       def chef_config_dir(path)
@@ -75,6 +105,8 @@ class Chef
         else
           @logger.warn("No fork/knife configuration file found")
         end
+        # override with command-line options
+        Chef::Config.merge!(options)
       end
 
       def get_command(name)

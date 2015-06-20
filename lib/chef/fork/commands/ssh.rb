@@ -51,11 +51,20 @@ class Chef
           optparse.on("--[no-]host-key-verify", "Verify host key, disabled by default") do |value|
             options[:host_key_verify] = value
           end
+
+          optparse.on("--[no-]dry-run", "Don't take action, only print what would happen") do |value|
+            options[:dry_run] = value
+          end
         end
 
         def ssh(hostname, args=[])
-          exec(ssh_command(hostname, args))
-          exit(127)
+          command = ssh_command(hostname, args)
+          if options[:dry_run]
+            STDOUT.puts(command)
+          else
+            exec(command)
+            exit(127)
+          end
         end
 
         def ssh_command(hostname, args=[])

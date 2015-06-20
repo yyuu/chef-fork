@@ -16,8 +16,7 @@ class Chef
           rest = optparse.order(args)
           hostname = rest.shift
           command = bootstrap_command()
-#         ssh(hostname, command) # TODO
-          STDOUT.puts(command)
+          ssh(hostname, [command])
         end
 
         private
