@@ -10,8 +10,9 @@ class Chef
       class Ssh < Noop
         def run(args=[])
           rest = optparse.order(args)
-          hostname = rest.shift
-          ssh(hostname, rest)
+          if hostname = rest.shift
+            ssh(hostname, rest)
+          end
         end
 
         private

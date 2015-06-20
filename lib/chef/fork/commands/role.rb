@@ -8,13 +8,14 @@ class Chef
     module Commands
       class Role < Noop
         def run(args=[])
-          case args.first
+          rest = optparse.order(args)
+          case rest.first
           when "from"
-            role_from(args.slice(1..-1))
+            role_from(rest.slice(1..-1) || [])
           when "show"
-            role_show(args.slice(1..-1))
+            role_show(rest.slice(1..-1) || [])
           else
-            raise(NameError.new(args.inspect))
+            raise(NameError.new(rest.inspect))
           end
         end
 

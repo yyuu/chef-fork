@@ -8,11 +8,12 @@ class Chef
     module Commands
       class Data < Noop
         def run(args=[])
-          case args.first
+          rest = optparse.order(args)
+          case rest.first
           when "bag"
-            data_bag(args.slice(1..-1))
+            data_bag(rest.slice(1..-1) || [])
           else
-            raise(NameError.new(args.inspect))
+            raise(NameError.new(rest.inspect))
           end
         end
 
@@ -20,9 +21,9 @@ class Chef
         def data_bag(args=[])
           case args.first
           when "from"
-            data_bag_from(args.slice(1..-1))
+            data_bag_from(args.slice(1..-1) || [])
           when "show"
-            data_bag_show(args.slice(1..-1))
+            data_bag_show(args.slice(1..-1) || [])
           else
             raise(NameError.new(args.inspect))
           end
@@ -31,7 +32,7 @@ class Chef
         def data_bag_from(args=[])
           case args.first
           when "file"
-            data_bag_from_file(args.slice(1..-1))
+            data_bag_from_file(args.slice(1..-1) || [])
           else
             raise(NameError.new(args.inspect))
           end

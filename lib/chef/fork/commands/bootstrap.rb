@@ -13,10 +13,11 @@ class Chef
     module Commands
       class Bootstrap < Ssh
         def run(args=[])
-          rest = optparse.order(args)
-          hostname = rest.shift
-          command = bootstrap_command()
-          ssh(hostname, [command])
+          rest = optparse.parse(args)
+          if hostname = rest.shift
+            command = bootstrap_command()
+            ssh(hostname, [command])
+          end
         end
 
         private
