@@ -32,10 +32,10 @@ class Chef
           options.merge!({
             distro: "chef-full",
             use_sudo: true,
-            use_sudo_password: false,
             run_list: [],
             first_boot_attributes: {},
           })
+
           optparse.on("-N NAME", "--node-name NAME", "The Chef node name for new node") do |value|
             options[:chef_node_name] = value
           end
@@ -50,10 +50,6 @@ class Chef
 
           optparse.on("--sudo", "Execute the bootstrap via sudo") do |value|
             options[:use_sudo] = value
-          end
-
-          optparse.on("--use-sudo-password", "Execute the bootstrap via sudo with password") do |value|
-            options[:use_sudo_password] = value
           end
 
           optparse.on("-r RUN_LIST", "--run-list RUN_LIST", "Comma separated list of roles/recipes to apply") do |value|

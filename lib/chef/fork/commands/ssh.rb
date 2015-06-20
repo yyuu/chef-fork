@@ -21,12 +21,9 @@ class Chef
             ssh_user: "root",
             host_key_verify: true,
           })
+
           optparse.on("-x USERNAME", "--ssh-user USERNAME", "The ssh username") do |value|
             options[:ssh_user] = value
-          end
-
-          optparse.on("-P PASSWORD", "--ssh-password PASSWORD", "The ssh password") do |value|
-            options[:ssh_password] = value
           end
 
           optparse.on("-p PORT", "--ssh-port PORT", "The ssh port") do |value|
@@ -60,10 +57,6 @@ class Chef
           if options[:ssh_user]
             ssh_options << "-l"
             ssh_options << options[:ssh_user]
-          end
-
-          if options[:ssh_password]
-            raise(NotImplementedError)
           end
 
           if options[:ssh_port]
@@ -113,9 +106,9 @@ class Chef
           end
 
           if args.empty?
-            "ssh #{Shellwords.shelljoin(ssh_options)} #{Shellwords.shellescape(hostname)}"
+            "ssh #{Shellwords.shelljoin(ssh_options)} -- #{Shellwords.shellescape(hostname)}"
           else
-            "ssh #{Shellwords.shelljoin(ssh_options)} #{Shellwords.shellescape(hostname)} -- #{Shellwords.shelljoin(args)}"
+            "ssh #{Shellwords.shelljoin(ssh_options)} -- #{Shellwords.shellescape(hostname)} #{Shellwords.shelljoin(args)}"
           end
         end
       end
