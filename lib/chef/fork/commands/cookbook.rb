@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 require "chef/fork/commands"
+require "json"
 
 class Chef
   class Fork
@@ -21,7 +22,16 @@ class Chef
 
         private
         def cookbook_show(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          if cookbook_name = args.shift
+            if args.empty?
+              cookbook_version = "_latest"
+              STDOUT.puts(JSON.pretty_generate(@rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
+            else
+              args.each do |cookbook_version|
+                STDOUT.puts(JSON.pretty_generate(@rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
+              end
+            end
+          end
         end
 
         def cookbook_upload(args=[])

@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require "chef/rest"
+
 class Chef
   class Fork
     module Commands
       class Noop
         def initialize(application)
           @application = application
+          @rest = Chef::REST.new(Chef::Config[:chef_server_url])
           define_options
         end
 
