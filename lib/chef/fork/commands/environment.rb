@@ -12,8 +12,12 @@ class Chef
         def run(args=[])
           rest = optparse.order(args)
           case rest.first
+          when "edit"
+            environment_edit(rest.slice(1..-1) || [])
           when "from"
             environment_from(rest.slice(1..-1) || [])
+          when "list"
+            environment_list(rest.slice(1..-1) || [])
           when "show"
             environment_show(rest.slice(1..-1) || [])
           else
@@ -22,6 +26,10 @@ class Chef
         end
 
         private
+        def environment_edit(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
         def environment_from(args=[])
           case args.first
           when "file"
@@ -32,6 +40,10 @@ class Chef
         end
 
         def environment_from_file(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
+        def environment_list(args=[])
           raise(NotImplementedError.new(args.inspect))
         end
 

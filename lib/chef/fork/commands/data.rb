@@ -23,13 +23,21 @@ class Chef
         private
         def data_bag(args=[])
           case args.first
+          when "edit"
+            data_bag_edit(args.slice(1..-1) || [])
           when "from"
             data_bag_from(args.slice(1..-1) || [])
+          when "list"
+            data_bag_list(args.slice(1..-1) || [])
           when "show"
             data_bag_show(args.slice(1..-1) || [])
           else
             raise(NameError.new(args.inspect))
           end
+        end
+
+        def data_bag_edit(args=[])
+          raise(NotImplementedError.new(args.inspect))
         end
 
         def data_bag_from(args=[])
@@ -42,6 +50,10 @@ class Chef
         end
 
         def data_bag_from_file(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
+        def data_bag_list(args=[])
           raise(NotImplementedError.new(args.inspect))
         end
 

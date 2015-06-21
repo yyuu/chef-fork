@@ -12,13 +12,22 @@ class Chef
         def run(args=[])
           rest = optparse.order(args)
           case rest.first
+          when "edit"
+            role_edit(rest.slice(1..-1) || [])
           when "from"
             role_from(rest.slice(1..-1) || [])
+          when "list"
+            role_list(rest.slice(1..-1) || [])
           when "show"
             role_show(rest.slice(1..-1) || [])
           else
             raise(NameError.new(rest.inspect))
           end
+        end
+
+        private
+        def role_edit(args=[])
+          raise(NotImplementedError.new(args.inspect))
         end
 
         def role_from(args=[])
@@ -31,6 +40,10 @@ class Chef
         end
 
         def role_from_file(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
+        def role_list(args=[])
           raise(NotImplementedError.new(args.inspect))
         end
 

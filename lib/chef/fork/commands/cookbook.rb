@@ -11,6 +11,10 @@ class Chef
         def run(args=[])
           rest = optparse.order(args)
           case rest.first
+          when "edit"
+            cookbook_edit(rest.slice(1..-1) || [])
+          when "list"
+            cookbook_list(rest.slice(1..-1) || [])
           when "show"
             cookbook_show(rest.slice(1..-1) || [])
           when "upload"
@@ -21,6 +25,14 @@ class Chef
         end
 
         private
+        def cookbook_edit(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
+        def cookbook_list(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
         def cookbook_show(args=[])
           if cookbook_name = args.shift
             if args.empty?

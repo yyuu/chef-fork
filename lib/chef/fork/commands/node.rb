@@ -12,6 +12,10 @@ class Chef
         def run(args=[])
           rest = optparse.order(args)
           case rest.first
+          when "edit"
+            node_edit(rest.slice(1..-1) || [])
+          when "list"
+            node_list(rest.slice(1..-1) || [])
           when "show"
             node_show(rest.slice(1..-1) || [])
           else
@@ -20,6 +24,14 @@ class Chef
         end
 
         private
+        def node_edit(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
+        def node_list(args=[])
+          raise(NotImplementedError.new(args.inspect))
+        end
+
         def node_show(args=[])
           args.each do |node_name|
             node = Chef::Node.load(node_name)
