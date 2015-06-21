@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require "chef/environment"
 require "chef/fork/commands"
+require "json"
 
 class Chef
   class Fork
@@ -34,7 +36,10 @@ class Chef
         end
 
         def environment_show(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          args.each do |environment_name|
+            environment = Chef::Environment.load(environment_name)
+            STDOUT.puts(JSON.pretty_generate(environment_to_hash(environment.to_hash())))
+          end
         end
       end
     end

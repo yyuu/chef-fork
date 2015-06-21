@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 require "chef/fork/commands"
+require "chef/role"
+require "json"
 
 class Chef
   class Fork
@@ -33,7 +35,10 @@ class Chef
         end
 
         def role_show(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          args.each do |role_name|
+            role = Chef::Role.load(role_name)
+            STDOUT.puts(JSON.pretty_generate(role_to_hash(role.to_hash())))
+          end
         end
       end
     end

@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 require "chef/fork/commands"
+require "chef/node"
+require "json"
 
 class Chef
   class Fork
@@ -19,7 +21,10 @@ class Chef
 
         private
         def node_show(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          args.each do |node_name|
+            node = Chef::Node.load(node_name)
+            STDOUT.puts(JSON.pretty_generate(node.to_hash()))
+          end
         end
       end
     end

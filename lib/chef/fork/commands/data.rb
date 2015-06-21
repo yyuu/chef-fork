@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require "chef/data_bag"
+require "chef/data_bag_item"
 require "chef/fork/commands"
+require "json"
 
 class Chef
   class Fork
@@ -43,7 +46,17 @@ class Chef
         end
 
         def data_bag_show(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          if data_bag_name = args.shift
+            if args.empty?
+              data_bag = Chef::DataBag.load(data_bag_name)
+              STDOUT.puts(JSON.pretty_generate(data_bag.to_hash()))
+            else
+              args.each do |data_bag_item_name|
+                data_bag_item = Chef::DataBagItem.load(data_bag_name, data_bag_item_name)
+                STDOUT.puts(JSON.pretty_generate(data_bag_item.to_hash()))
+              end
+            end
+          end
         end
       end
     end
