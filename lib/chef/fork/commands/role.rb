@@ -20,6 +20,8 @@ class Chef
             role_list(rest.slice(1..-1) || [])
           when "show"
             role_show(rest.slice(1..-1) || [])
+          when "upload"
+            role_upload(rest.slice(1..-1) || [])
           else
             raise(NameError.new(rest.inspect))
           end
@@ -40,7 +42,7 @@ class Chef
         end
 
         def role_from_file(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          role_upload(args)
         end
 
         def role_list(args=[])
@@ -52,6 +54,18 @@ class Chef
             role = Chef::Role.load(role_name)
             STDOUT.puts(JSON.pretty_generate(role_to_hash(role.to_hash())))
           end
+        end
+
+        def role_upload(args=[])
+          role_paths = [ Chef::Config[:role_path] ].flatten
+          args.each do |role_name|
+            candidates = role_paths.map { |path| File.join(path, "#{role_name}.rb") }
+            if file = candidates.select { |candidate| File.exist?(candidate) }.first
+              role = Chef::Role.from_disk(role_name)
+              p(role) # TODO: do upload
+            end
+          end
+          raise(NotImplementedError.new(args.inspect))
         end
       end
     end

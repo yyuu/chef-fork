@@ -31,6 +31,8 @@ class Chef
             data_bag_list(args.slice(1..-1) || [])
           when "show"
             data_bag_show(args.slice(1..-1) || [])
+          when "upload"
+            data_bag_upload(args.slice(1..-1) || [])
           else
             raise(NameError.new(args.inspect))
           end
@@ -50,7 +52,7 @@ class Chef
         end
 
         def data_bag_from_file(args=[])
-          raise(NotImplementedError.new(args.inspect))
+          data_bag_uploda(args)
         end
 
         def data_bag_list(args=[])
@@ -69,6 +71,20 @@ class Chef
               end
             end
           end
+        end
+
+        def data_bag_upload(args=[])
+          data_bag_paths = [ Chef::Config[:data_bag_path] ].flatten
+          if data_bag_name = args.shift
+            args.each do |data_bag_item_name|
+              candidates = data_bag_paths.map { |path| File.join(path, data_bag_name, "#{data_bag_item_name}.json") }
+              if file = candidates.select { |candidate| File.exist?(candidate) }.first
+                data_bag_item = Chef::DataBagItem.from_hash(JSON.load(File.read(file)))
+                p(data_bag_item) # TODO: do upload
+              end
+            end
+          end
+          raise(NotImplementedError.new(args.inspect))
         end
       end
     end

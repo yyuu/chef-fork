@@ -47,6 +47,13 @@ class Chef
         end
 
         def cookbook_upload(args=[])
+          cookbook_paths = [ Chef::Config[:cookbook_path] ].flatten
+          args.each do |cookbook_name|
+            candidates = cookbook_paths.map { |path| File.join(path, cookbook_name) }
+            if file = candidates.select { |candidate| File.exist?(candidate) }.first
+              p([cookbook_name, file])
+            end
+          end
           raise(NotImplementedError.new(args.inspect))
         end
       end
