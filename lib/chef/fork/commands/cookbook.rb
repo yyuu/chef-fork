@@ -37,10 +37,10 @@ class Chef
           if cookbook_name = args.shift
             if args.empty?
               cookbook_version = "_latest"
-              STDOUT.puts(JSON.pretty_generate(@rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
+              STDOUT.puts(JSON.pretty_generate(rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
             else
               args.each do |cookbook_version|
-                STDOUT.puts(JSON.pretty_generate(@rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
+                STDOUT.puts(JSON.pretty_generate(rest.get_rest("cookbooks/#{cookbook_name}/#{cookbook_version}").to_hash()))
               end
             end
           end

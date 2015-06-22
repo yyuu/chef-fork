@@ -9,7 +9,6 @@ class Chef
       class Noop
         def initialize(application)
           @application = application
-          @rest = Chef::REST.new(Chef::Config[:chef_server_url])
           define_options
         end
 
@@ -29,6 +28,10 @@ class Chef
 
         def optparse()
           @application.optparse
+        end
+
+        def rest()
+          @rest ||= Chef::REST.new(Chef::Config[:chef_server_url])
         end
       end
     end
