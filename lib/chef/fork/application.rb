@@ -21,7 +21,6 @@ class Chef
       attr_reader :optparse
 
       def main(args=[])
-        configure_chef(locate_config_file("fork") || locate_config_file("knife"))
         rest = @optparse.order(args)
         begin
           command = get_command(rest.shift || "help").new(self)
@@ -29,6 +28,10 @@ class Chef
         rescue Errno::EPIPE
           # noop
         end
+      end
+
+      def configure(options={})
+        configure_chef(locate_config_file("fork") || locate_config_file("knife"), options)
       end
 
       private
@@ -98,7 +101,7 @@ class Chef
         end
       end
 
-      def configure_chef(config_file)
+      def configure_chef(config_file, options={})
         if config_file
           @logger.info("Using configuration from #{config_file}")
           Chef::Config.from_file(config_file)

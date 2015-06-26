@@ -10,20 +10,20 @@ class Chef
     module Commands
       class Role < Noop
         def run(args=[])
-          rest = optparse.order(args)
-          case rest.first
+          super
+          case @args.first
           when "edit"
-            role_edit(rest.slice(1..-1) || [])
+            role_edit(@args.slice(1..-1) || [])
           when "from"
-            role_from(rest.slice(1..-1) || [])
+            role_from(@args.slice(1..-1) || [])
           when "list"
-            role_list(rest.slice(1..-1) || [])
+            role_list(@args.slice(1..-1) || [])
           when "show"
-            role_show(rest.slice(1..-1) || [])
+            role_show(@args.slice(1..-1) || [])
           when "upload"
-            role_upload(rest.slice(1..-1) || [])
+            role_upload(@args.slice(1..-1) || [])
           else
-            raise(NameError.new(rest.inspect))
+            raise(NameError.new(@args.inspect))
           end
         end
 

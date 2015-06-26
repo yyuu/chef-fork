@@ -8,8 +8,8 @@ class Chef
     module Commands
       class Databag < Data
         def run(args=[])
-          rest = optparse.order(args)
-          data_bag(rest)
+          super
+          data_bag(@args)
         end
       end
     end

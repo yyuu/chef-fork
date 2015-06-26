@@ -10,7 +10,9 @@ class Chef
     module Commands
       class Help < Noop
         def run(args=[])
-          if command = args.shift
+          super
+          rest = @args.dup
+          if command = rest.shift
             case command
             when "commands"
               paths = $LOAD_PATH.map { |path|
