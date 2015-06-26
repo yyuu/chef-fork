@@ -77,7 +77,7 @@ class Chef
             template = File.read(template_file)
             render_template(template)
           else
-            raise(NameError.new("Unknown distro: #{distro.inspect}"))
+            raise(NameError.new("Unknown distro: #{options[:distro].inspect}"))
           end
         end
 
