@@ -8,15 +8,14 @@ Gem::Specification.new do |spec|
   spec.version       = Chef::Fork::VERSION
   spec.authors       = ["Yamashita Yuu"]
   spec.email         = ["peek824545201@gmail.com"]
-
   spec.summary       = %q{A tool for your left hand, to have a meal cooked by chef.}
   spec.description   = %q{A tool for your left hand, to have a meal cooked by chef.}
   spec.homepage      = "https://github.com/yyuu/chef-fork"
   spec.license       = "Apache-2.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.9"
