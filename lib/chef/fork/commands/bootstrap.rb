@@ -75,7 +75,12 @@ class Chef
           template_file = options[:template_file] || find_template(options[:distro])
           if template_file
             template = File.read(template_file)
-            render_template(template)
+            command = render_template(template)
+            if options[:use_sudo]
+              "sudo #{command}"
+            else
+              command
+            end
           else
             raise(NameError.new("Unknown distro: #{options[:distro].inspect}"))
           end
