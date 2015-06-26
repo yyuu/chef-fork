@@ -15,6 +15,7 @@ class Chef
         def run(args=[])
           @args = optparse.parse(args)
           configure(options)
+          rest = @args.dup
           if hostname = rest.shift
             command = bootstrap_command()
             ssh(hostname, [command])

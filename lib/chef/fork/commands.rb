@@ -32,6 +32,10 @@ class Chef
           @application.optparse
         end
 
+        def configure(options={})
+          @application.configure(options)
+        end
+
         def rest()
           @rest ||= Chef::REST.new(Chef::Config[:chef_server_url])
         end
