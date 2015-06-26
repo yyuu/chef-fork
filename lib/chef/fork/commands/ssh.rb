@@ -9,8 +9,8 @@ class Chef
     module Commands
       class Ssh < Noop
         def run(args=[])
-          super
-          rest = @args.dup
+          rest = order_args(args)
+          rest = rest.dup
           if hostname = rest.shift
             ssh(hostname, rest)
           end

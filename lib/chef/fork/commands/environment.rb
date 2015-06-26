@@ -10,20 +10,20 @@ class Chef
     module Commands
       class Environment < Noop
         def run(args=[])
-          super
-          case @args.first
+          rest = order_args(args)
+          case rest.first
           when "edit"
-            environment_edit(@args.slice(1..-1) || [])
+            environment_edit(rest.slice(1..-1) || [])
           when "from"
-            environment_from(@args.slice(1..-1) || [])
+            environment_from(rest.slice(1..-1) || [])
           when "list"
-            environment_list(@args.slice(1..-1) || [])
+            environment_list(rest.slice(1..-1) || [])
           when "show"
-            environment_show(@args.slice(1..-1) || [])
+            environment_show(rest.slice(1..-1) || [])
           when "upload"
-            environment_upload(@args.slice(1..-1) || [])
+            environment_upload(rest.slice(1..-1) || [])
           else
-            raise(NameError.new(@args.inspect))
+            raise(NameError.new(rest.inspect))
           end
         end
 

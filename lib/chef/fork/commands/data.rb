@@ -11,12 +11,12 @@ class Chef
     module Commands
       class Data < Noop
         def run(args=[])
-          super
-          case @args.first
+          rest = order_args(args)
+          case rest.first
           when "bag"
-            data_bag(@args.slice(1..-1) || [])
+            data_bag(rest.slice(1..-1) || [])
           else
-            raise(NameError.new(@args.inspect))
+            raise(NameError.new(rest.inspect))
           end
         end
 

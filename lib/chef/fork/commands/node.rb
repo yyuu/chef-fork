@@ -10,14 +10,14 @@ class Chef
     module Commands
       class Node < Noop
         def run(args=[])
-          super
-          case @args.first
+          rest = order_args(args)
+          case rest.first
           when "edit"
-            node_edit(@args.slice(1..-1) || [])
+            node_edit(rest.slice(1..-1) || [])
           when "list"
-            node_list(@args.slice(1..-1) || [])
+            node_list(rest.slice(1..-1) || [])
           when "show"
-            node_show(@args.slice(1..-1) || [])
+            node_show(rest.slice(1..-1) || [])
           else
             raise(NameError.new(@args.inspect))
           end

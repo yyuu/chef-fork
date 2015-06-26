@@ -9,13 +9,11 @@ class Chef
       class Noop
         def initialize(application)
           @application = application
-          @args = []
           define_options
         end
 
         def run(args=[])
-          @args = @application.optparse.order(args)
-          configure(@application.options)
+          order_args(args=[])
         end
 
         private
@@ -32,8 +30,16 @@ class Chef
           @application.optparse
         end
 
-        def configure(options={})
-          @application.configure(options)
+        def order_args(args=[])
+          args = @application.optparse.order(args)
+          @application.configure(@application.options)
+          args
+        end
+
+        def parse_args(args=[])
+          args = @application.optparse.parse(args)
+          @application.configure(@application.options)
+          args
         end
 
         def rest()

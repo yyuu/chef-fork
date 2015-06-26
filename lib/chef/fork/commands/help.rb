@@ -10,8 +10,7 @@ class Chef
     module Commands
       class Help < Noop
         def run(args=[])
-          super
-          rest = @args.dup
+          rest = order_args(args)
           if command = rest.shift
             case command
             when "commands"

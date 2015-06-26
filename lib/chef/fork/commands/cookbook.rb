@@ -9,18 +9,18 @@ class Chef
     module Commands
       class Cookbook < Noop
         def run(args=[])
-          super
-          case @args.first
+          rest = order_args(args)
+          case rest.first
           when "edit"
-            cookbook_edit(@args.slice(1..-1) || [])
+            cookbook_edit(rest.slice(1..-1) || [])
           when "list"
-            cookbook_list(@args.slice(1..-1) || [])
+            cookbook_list(rest.slice(1..-1) || [])
           when "show"
-            cookbook_show(@args.slice(1..-1) || [])
+            cookbook_show(rest.slice(1..-1) || [])
           when "upload"
-            cookbook_upload(@args.slice(1..-1) || [])
+            cookbook_upload(rest.slice(1..-1) || [])
           else
-            raise(NameError.new(@args.inspect))
+            raise(NameError.new(rest.inspect))
           end
         end
 
