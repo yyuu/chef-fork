@@ -82,7 +82,12 @@ class Chef
         end
 
         def find_template(name)
-          templates = $LOAD_PATH.map { |path| File.join(path, "chef", "knife", "bootstrap", "templates", "#{name}.erb") }
+          templates = $LOAD_PATH.map { |path|
+            [
+              File.join(path, "chef", "knife", "bootstrap", "templates", "#{name}.erb"), # Chef 12.x
+              File.join(path, "chef", "knife", "bootstrap", "#{name}.erb"), # Chef 11.x
+            ]
+          }.reduce(:+)
           templates.find { |path| File.exist?(path) }
         end
 
