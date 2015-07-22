@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 require "chef"
+require "chef/config"
 require "chef/knife/core/bootstrap_context"
 require "erubis"
 require "json"
@@ -36,10 +37,12 @@ class Chef
 
           optparse.on("--bootstrap-version VERSION", "The version of Chef to install") do |value|
             options[:bootstrap_version] = value
+            Chef::Config[:knife][:bootstrap_version] = value
           end
 
           optparse.on("--bootstrap-proxy PROXY_URL", "The proxy server for the node being bootstrapped") do |value|
             options[:bootstrap_proxy] = value
+            Chef::Config[:knife][:bootstrap_proxy] = value
           end
 
           optparse.on("-d DISTRO", "--distro DISTRO", "Bootstrap a distro using a template") do |value|
@@ -64,10 +67,12 @@ class Chef
 
           optparse.on("-s SECRET", "--secret SECRET", "The secret key to use to encrypt data bag item values") do |value|
             options[:secret] = value
+            Chef::Config[:knife][:secret] = value
           end
 
           optparse.on("--secret-file SECRET_FILE", "A file containing the secret key to use to encrypt data bag item values") do |value|
             options[:secret_file] = value
+            Chef::Config[:knife][:secret_file] = value
           end
         end
 

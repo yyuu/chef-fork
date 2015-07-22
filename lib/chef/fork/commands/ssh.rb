@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
+require "chef/config"
 require "shellwords"
 require "chef/fork/commands"
 
@@ -32,26 +33,32 @@ class Chef
 
           optparse.on("-x USERNAME", "--ssh-user USERNAME", "The ssh username") do |value|
             options[:ssh_user] = value
+            Chef::Config[:knife][:ssh_user] = value
           end
 
           optparse.on("-p PORT", "--ssh-port PORT", "The ssh port") do |value|
             options[:ssh_port] = value
+            Chef::Config[:knife][:ssh_port] = value
           end
 
           optparse.on("-G GATEWAY", "--ssh-gateway GATEWAY", "The ssh gateway") do |value|
             options[:ssh_gateway] = value
+            Chef::Config[:knife][:ssh_gateway] = value
           end
 
           optparse.on("-A", "--[no-]forward-agent", "Enable SSH agent forwarding") do |value|
             options[:forward_agent] = value
+            Chef::Config[:knife][:forward_agent] = value
           end
 
           optparse.on("-i IDENTITY_FILE", "--identity-file IDENTITY_FILE") do |value|
             options[:identity_file] = value
+            Chef::Config[:knife][:identity_file] = value
           end
 
           optparse.on("--[no-]host-key-verify", "Verify host key, disabled by default") do |value|
             options[:host_key_verify] = value
+            Chef::Config[:knife][:host_key_verify] = value
           end
 
           optparse.on("--[no-]dry-run", "Don't take action, only print what would happen") do |value|
