@@ -3,10 +3,10 @@
 
 require "chef"
 require "chef/config"
-require "chef/knife/core/bootstrap_context"
 require "erubis"
 require "json"
 require "shellwords"
+require "chef/fork/bootstrap/context"
 require "chef/fork/commands/ssh"
 
 class Chef
@@ -94,6 +94,8 @@ class Chef
         def find_template(name)
           templates = $LOAD_PATH.map { |path|
             [
+              File.join(path, "chef", "fork", "bootstrap", "templates", "#{name}.erb"), # Chef 12.x
+              File.join(path, "chef", "fork", "bootstrap", "#{name}.erb"), # Chef 11.x
               File.join(path, "chef", "knife", "bootstrap", "templates", "#{name}.erb"), # Chef 12.x
               File.join(path, "chef", "knife", "bootstrap", "#{name}.erb"), # Chef 11.x
             ]
@@ -102,7 +104,7 @@ class Chef
         end
 
         def render_template(template)
-          context = Chef::Knife::Core::BootstrapContext.new(options, options[:run_list], Chef::Config)
+          context = Chef::Fork::Bootstrap::Context.new(options, options[:run_list], Chef::Config)
           Erubis::Eruby.new(template).evaluate(context)
         end
       end
