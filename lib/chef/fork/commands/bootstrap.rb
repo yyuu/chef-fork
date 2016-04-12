@@ -3,6 +3,7 @@
 
 require "chef"
 require "chef/config"
+require "chef/encrypted_data_bag_item"
 require "erubis"
 require "json"
 require "shellwords"
@@ -104,7 +105,23 @@ class Chef
         end
 
         def render_template(template)
-          context = Chef::Fork::Bootstrap::Context.new(options, options[:run_list], Chef::Config)
+          case Chef::VERSION.split(".").first
+          when "11"
+            context = Chef::Fork::Bootstrap::Context.new(options, options[:run_list], Chef::Config)
+          else
+            if Chef::Config[:knife][:secret]
+              secret = Chef::Config[:knife][:secret]
+            else
+              if Chef::Config[:knife][:secret_file]
+                secret = Chef::EncryptedDataBagItem.load_secret(Chef::Config[:knife][:secret_file])
+              end
+            end
+            if secret
+              context = Chef::Fork::Bootstrap::Context.new(options, options[:run_list], Chef::Config, secret)
+            else
+              context = Chef::Fork::Bootstrap::Context.new(options, options[:run_list], Chef::Config)
+            end
+          end
           Erubis::Eruby.new(template).evaluate(context)
         end
       end
